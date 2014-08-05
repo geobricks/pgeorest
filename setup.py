@@ -11,8 +11,8 @@ setup(
     description='PGeoREST module.',
     long_description=open('README.txt').read(),
     install_requires=[
-        "flask >= 0.10.1",
-        "flask-cors >= 1.3.1",
-        "pgeo >= 0.1.0"
+        'flask >= 0.10.1',
+        'flask-cors >= 1.3.1',
+        'pgeo >= 0.1.0'
     ]
 )
