@@ -22,10 +22,15 @@ def index():
 @metadata.route('/create/', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def create():
+    """
+    Store a metadata in the MongoDB
+    @return: Acknowledge in JSON format: status_code, status_message, mongo_id
+    """
     try:
         user_json = request.get_json()
-        test = merge_layer_metadata('modis', user_json)
-        insert_metadata(user_json)
-        return Response(json.dumps(test), content_type='application/json; charset=utf-8')
+        merged = merge_layer_metadata('modis', user_json)
+        mongo_id = str(insert_metadata(merged))
+        response = {'status_code': 200, 'status_message': 'OK', 'mongo_id': mongo_id}
+        return Response(json.dumps(response), content_type='application/json; charset=utf-8')
     except:
         raise PGeoException(errors[513], status_code=513)
