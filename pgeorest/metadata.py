@@ -24,5 +24,8 @@ def index():
 @metadata.route('/create/', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def create():
-    req_json = json.loads(request.get_json())
-    return Response(json.dumps(req_json['name']), content_type='application/json; charset=utf-8')
+    try:
+        req_json = json.loads(request.get_json())
+        return Response(json.dumps(req_json['name']), content_type='application/json; charset=utf-8')
+    except:
+        raise PGeoException(errors[513], status_code=513)
