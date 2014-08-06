@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'flask >= 0.10.1',
         'flask-cors >= 1.3.1',
-        'pgeo >= 0.1.0'
+        'pgeo >= 0.1.0',
+        'bson >= 0.3.3'
     ]
 )
