@@ -23,8 +23,8 @@ def index():
 @cross_origin(origins='*', headers=['Content-Type'])
 def create():
     """
-    Store a metadata in the MongoDB
-    @return: Acknowledge in JSON format: status_code, status_message, mongo_id
+        Store a metadata in the MongoDB
+        @return: Acknowledge in JSON format: status_code, status_message, mongo_id
     """
     try:
         user_json = request.get_json()
