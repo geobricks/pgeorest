@@ -18,8 +18,8 @@ threads_map_key = 'FENIX'
 def index():
     return 'Welcome to the Download module!'
 
-
-@download.route('/start/manager/<source_name>/<product>/<year>/<day>/<from_h>/<to_h>/<from_v>/<to_v>')
+# TODO: alter to pass the list of layers to be downloaded, taken from browse service
+@download.route('/start/manager/<source_name>/<product>/<year>/<day>')
 @cross_origin(origins='*')
 def manager_start(source_name, product, year, day):
     create_filesystem(source_name, {'product': 'Simone', 'year': '2014', 'day': '1'})
