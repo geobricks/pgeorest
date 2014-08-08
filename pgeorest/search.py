@@ -57,3 +57,11 @@ def find_layer_by_product_and_dekad_service(product, dekad):
 def find_layer_by_product_and_dekad_and_type_service(product, dekad, aggregation_type):
     out = json_util.dumps(mongo_search.find_layers_by_product(product, dekad, aggregation_type))
     return Response(out, content_type='application/json; charset=utf-8')
+
+
+@search.route('/layer/from/<dekad_from>/to/<dekad_to>', methods=['GET'])
+@search.route('/layer/from/<dekad_from>/to/<dekad_to>/', methods=['GET'])
+@cross_origin(origins='*')
+def find_layer_by_dekad_range(dekad_from, dekad_to):
+    out = json_util.dumps(mongo_search.find_layers_by_dekad_range(dekad_from, dekad_to))
+    return Response(out, content_type='application/json; charset=utf-8')
