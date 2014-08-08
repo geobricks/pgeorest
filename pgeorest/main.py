@@ -23,5 +23,3 @@ def root():
 
 if __name__ == '__main__':
     app.run(port=settings['port'], debug=settings['debug'])
-
-

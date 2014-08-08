@@ -7,6 +7,7 @@ from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeo.db.mongo.metadata.db import insert_metadata
 from pgeo.metadata.metadata import merge_layer_metadata
+from pgeo.db.mongo.metadata.db import remove_metadata_by_id
 
 
 metadata = Blueprint('metadata', __name__)
@@ -23,8 +24,8 @@ def index():
 @cross_origin(origins='*', headers=['Content-Type'])
 def create():
     """
-        Store a metadata in the MongoDB
-        @return: Acknowledge in JSON format: status_code, status_message, mongo_id
+    Store a metadata in the MongoDB
+    @return: Acknowledge in JSON format: status_code, status_message, mongo_id
     """
     try:
         user_json = request.get_json()
@@ -32,5 +33,21 @@ def create():
         mongo_id = str(insert_metadata(merged))
         response = {'status_code': 200, 'status_message': 'OK', 'mongo_id': mongo_id}
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
+    except:
+        raise PGeoException(errors[513], status_code=513)
+
+
+@metadata.route('/delete/<id>', methods=['DELETE'])
+@metadata.route('/delete/<id>/', methods=['DELETE'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def delete(id):
+    """
+    REST service to delete a metadata from the DB.
+    @param id: ID of the resource to be deleted.
+    @return: MongoDB message
+    """
+    try:
+        out = remove_metadata_by_id(id)
+        return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except:
         raise PGeoException(errors[513], status_code=513)
