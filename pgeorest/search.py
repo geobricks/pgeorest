@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import Response
 from flask.ext.cors import cross_origin
-from pgeo.db.mongo.search import MongoSearch
+from pgeo.metadata.search import MongoSearch
 from bson import json_util
 from pgeo.config.settings import settings
 

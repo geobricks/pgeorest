@@ -51,8 +51,8 @@ def index():
 def get_stats(layer):
     """
     Extracts all the statistics of a layer
-    :param layer: workspace:layername
-    :return: json with the raster statistics
+    @param layer: workspace:layername
+    @return: json with the raster statistics
     """
     try:
         if ":" not in layer:
@@ -71,8 +71,8 @@ def get_stats(layer):
 def get_histogram(layer):
     """
     Extracts histogram from a layer
-    :param layer: workspace:layername
-    :return: json with the raster statistics
+    @param layer: workspace:layername
+    @return: json with the raster statistics
     """
     try:
         if ":" not in layer:
@@ -93,8 +93,9 @@ def get_histogram_buckets(layer, buckets):
     Extracts histogram from a layer
     TODO: add a boolean and buckets
     default: boolean = True, buckets = 256
-    :param layer: workspace:layername
-    :return: json with the raster statistics
+    @param layer: workspace:layername
+    @param buckets: number of buckets i.e. 256
+    @return: json with the raster statistics
     """
     try:
         if ":" not in layer:
@@ -108,5 +109,21 @@ def get_histogram_buckets(layer, buckets):
         raise PGeoException(e.get_message(), e.get_status_code())
 
 
+@app.route('/raster/<layer>/lat/<lat>/lon/<lon>', methods=['GET'])
+@app.route('/raster/<layer>/lat/<lat>/lon/<lon>/', methods=['GET'])
+@cross_origin(origins='*')
+def get_lat_lon(layer, lat, lon):
+    """
+    Get the value of the layer at lat/lon position
+    @param layer: workspace:layername
+    @param lat: latitude
+    @param lon: longitude
+    @return: json with the raster statistics
+    """
+    try:
+        if ":" not in layer:
+            return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
 
-
+        return "TODO"
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
