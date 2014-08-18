@@ -6,7 +6,6 @@ from flask.ext.cors import cross_origin
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeo.config.settings import settings
-# from pgeo.db.mongo.metadata.db import insert_metadata
 from pgeo.metadata.metadata import merge_layer_metadata
 from pgeo.metadata.db_metadata import DBMetadata
 
@@ -19,7 +18,6 @@ metadata = Blueprint('metadata', __name__)
 def index():
     return 'Welcome to the Metadata module!'
 
-# Metadata DB
 DBMetadata = DBMetadata(settings["db"]["metadata"])
 
 

@@ -13,8 +13,8 @@ filesystem = Blueprint('filesystem', __name__)
 @cross_origin(origins='*')
 def index():
     """
-        Welcome message
-        @return: welcome message
+    Welcome message
+    @return: welcome message
     """
     return 'Welcome to the Filesystem module!'
 
@@ -24,9 +24,9 @@ def index():
 @cross_origin(origins='*')
 def create_filesystem_service(source):
     """
-        This service create the filesystem structure as specified in the configuration file.
-        @param source: e.g. 'modis'
-        @return: Result of the operation
+    This service create the filesystem structure as specified in the configuration file.
+    @param source: e.g. 'modis'
+    @return: Result of the operation
     """
     try:
         create_filesystem(source, {'product': 'Simone', 'year': '2014', 'day': '1'})
