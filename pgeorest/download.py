@@ -9,6 +9,7 @@ from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeo.thread.download_threads_manager import Manager
 from pgeo.thread.download_threads_manager import progress_map
+from pgeo.thread.download_threads_manager import out_template
 
 
 download = Blueprint('download', __name__)
@@ -39,26 +40,5 @@ def manager_start(source_name):
 @cross_origin(origins='*')
 def progress(layer_name):
     if layer_name not in progress_map:
-        out = {
-            'download_size': 'unknown',
-            'layer_name': 'unknown',
-            'progress': 0,
-            'total_size': 'unknown',
-            'status': 'unknown'
-        }
-        return jsonify(progress=out)
+        return jsonify(progress=out_template)
     return jsonify(progress=progress_map[layer_name])
-
-
-
-
-#
-#
-# @download.route('/kill/<key>')
-# @cross_origin(origins='*')
-# def kill(key):
-#     percent_done = thread_manager_processes[threads_map_key][key].percent_done()
-#     del thread_manager_processes[threads_map_key][key]
-#     done = True
-#     percent_done = round(percent_done, 1)
-#     return jsonify(key=key, percent=percent_done, done=done)
