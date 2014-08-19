@@ -8,12 +8,13 @@ from pgeo.thread.download_threads_manager import LayerDownloadThread
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeo.thread.download_threads_manager import Manager
+from pgeo.thread.download_threads_manager import progress_map
 
 
 download = Blueprint('download', __name__)
-thread_manager_processes = {}
-progress_map = {}
-threads_map_key = 'FENIX'
+# thread_manager_processes = {}
+# progress_map = {}
+# threads_map_key = 'FENIX'
 
 
 @download.route('/')
@@ -33,27 +34,24 @@ def manager_start(source_name):
         raise PGeoException(e.message, 500)
 
 
+@download.route('/progress/<layer_name>')
+@download.route('/progress/<layer_name>/')
+@cross_origin(origins='*')
+def progress(layer_name):
+    if layer_name not in progress_map:
+        out = {
+            'download_size': 'unknown',
+            'layer_name': 'unknown',
+            'progress': 0,
+            'total_size': 'unknown',
+            'status': 'unknown'
+        }
+        return jsonify(progress=out)
+    return jsonify(progress=progress_map[layer_name])
 
-# @download.route('/start/<source_name>/<product>/<year>/<day>/<layer_name>')
-# @cross_origin(origins='*')
-# def process_start(source_name, product, year, day, layer_name):
-#     fjp = LayerDownloadThread(source_name, product, year, day, layer_name)
-#     fjp.start()
-#     if not threads_map_key in thread_manager_processes:
-#         thread_manager_processes[threads_map_key] = {}
-#     thread_manager_processes[threads_map_key][layer_name] = fjp
-#     percent_done = round(fjp.percent_done(), 1)
-#     done = False
-#     return jsonify(key=layer_name, percent=percent_done, done=done)
-#
-#
-# @download.route('/progress/<layer_name>')
-# @cross_origin(origins='*')
-# def process_progress(layer_name):
-#     if layer_name not in progress_map:
-#         progress = {'download_size': 'unknown', 'layer_name': 'unknown', 'progress': 0, 'total_size': 'unknown', 'status': 'unknown'}
-#         return jsonify(progress=progress)
-#     return jsonify(progress=progress_map[layer_name])
+
+
+
 #
 #
 # @download.route('/kill/<key>')
