@@ -10,6 +10,8 @@ from pgeo.error.custom_exceptions import errors
 from pgeo.thread.download_threads_manager import Manager
 from pgeo.thread.download_threads_manager import progress_map
 from pgeo.thread.download_threads_manager import out_template
+from pgeo.thread.download_threads_manager import thread_manager_processes
+from pgeo.thread.download_threads_manager import threads_map_key
 
 
 download = Blueprint('download', __name__)
@@ -41,4 +43,7 @@ def manager_start(source_name):
 def progress(layer_name):
     if layer_name not in progress_map:
         return jsonify(progress=out_template)
-    return jsonify(progress=progress_map[layer_name])
+    key = progress_map[layer_name]['key']
+    if key is not None:
+        return jsonify(progress=thread_manager_processes[threads_map_key][key].percent_done())
+    return jsonify(progress=0)
