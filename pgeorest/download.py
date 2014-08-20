@@ -4,20 +4,13 @@ from flask import jsonify
 from flask.ext.cors import cross_origin
 from flask import request
 from flask import Response
-from pgeo.thread.download_threads_manager import LayerDownloadThread
 from pgeo.error.custom_exceptions import PGeoException
-from pgeo.error.custom_exceptions import errors
 from pgeo.thread.download_threads_manager import Manager
 from pgeo.thread.download_threads_manager import progress_map
 from pgeo.thread.download_threads_manager import out_template
-from pgeo.thread.download_threads_manager import thread_manager_processes
-from pgeo.thread.download_threads_manager import threads_map_key
 
 
 download = Blueprint('download', __name__)
-# thread_manager_processes = {}
-# progress_map = {}
-# threads_map_key = 'FENIX'
 
 
 @download.route('/')
