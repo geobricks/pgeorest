@@ -22,8 +22,10 @@ def index():
 @cross_origin(origins='*', headers=['Content-Type'])
 def manager_start(source_name):
     try:
-        file_paths_and_sizes = request.get_json()
-        mgr = Manager(source_name, file_paths_and_sizes)
+        payload = request.get_json()
+        file_paths_and_sizes = payload['file_paths_and_sizes']
+        filesystem_structure = payload['filesystem_structure']
+        mgr = Manager(source_name, file_paths_and_sizes, filesystem_structure)
         mgr.run()
         return Response(json.dumps('Manager started.'), content_type='application/json; charset=utf-8')
     except Exception, e:
