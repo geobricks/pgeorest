@@ -53,3 +53,14 @@ def list_layers_service(product_name, year, day):
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
+
+
+@browse_modis.route('/countries')
+@browse_modis.route('/countries/')
+@cross_origin(origins='*')
+def list_countries():
+    try:
+        out = m.list_countries()
+        return Response(json.dumps(out), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
