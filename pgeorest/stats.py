@@ -138,7 +138,6 @@ def get_stats_by_layer():
         # merged = merge_layer_metadata('modis', user_json)
         # mongo_id = str(DBMetadata.insert_metadata(merged))
         # response = {'status_code': 200, 'status_message': 'OK', 'mongo_id': mongo_id}
-        print user_json
         s = stats.zonal_stats(user_json)
         print s
         return Response(json.dumps(s), content_type='application/json; charset=utf-8')
