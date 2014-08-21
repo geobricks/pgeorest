@@ -9,5 +9,7 @@ pgeorest/browse_trmm.py
 pgeorest/download.py
 pgeorest/filesystem.py
 pgeorest/main.py
+pgeorest/metadata.py
 pgeorest/schema.py
+pgeorest/search.py
 pgeorest/stats.py
