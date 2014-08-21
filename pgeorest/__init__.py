@@ -10,9 +10,11 @@ from pgeorest.metadata import metadata
 from pgeorest.search import search
 from pgeorest import stats
 
+import logging
+
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
+cors = CORS(app, resources={r'/*': {'origins': '*'}})
 
 app.register_blueprint(browse_modis, url_prefix='/browse/modis')
 app.register_blueprint(browse_trmm, url_prefix='/browse/trmm')
@@ -23,3 +25,5 @@ app.register_blueprint(stats.app, url_prefix='/stats')
 app.register_blueprint(metadata, url_prefix='/metadata')
 app.register_blueprint(search, url_prefix='/search')
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
