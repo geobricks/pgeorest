@@ -7,6 +7,7 @@ from flask.ext.cors import cross_origin
 from pgeo.error.custom_exceptions import PGeoException
 
 from pgeo.dataproviders import modis as m
+from pgeo.gis.raster import process_hdfs
 
 
 browse_modis = Blueprint('browse_modis', __name__)
@@ -55,6 +56,17 @@ def list_layers_service(product_name, year, day):
         raise PGeoException(e.get_message(), e.get_status_code())
 
 
+@browse_modis.route('/<product_name>/<year>/<day>/<from_h>/<to_h>/<from_v>/<to_v>')
+@browse_modis.route('/<product_name>/<year>/<day>/<from_h>/<to_h>/<from_v>/<to_v>/')
+@cross_origin(origins='*')
+def list_layers_subset_service(product_name, year, day, from_h, to_h, from_v, to_v):
+    try:
+        out = m.list_layers_subset(product_name, year, day, from_h, to_h, from_v, to_v)
+        return Response(json.dumps(out), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+
 @browse_modis.route('/countries')
 @browse_modis.route('/countries/')
 @cross_origin(origins='*')
@@ -64,3 +76,37 @@ def list_countries():
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
+
+
+@browse_modis.route('/process')
+@browse_modis.route('/process/')
+@cross_origin(origins='*')
+def process_rasters_service():
+    obj = {
+        "output_file_name" : "MODIS_250m.tif",
+        "source_path" : "/home/kalimaha/Desktop/MODIS/MOD13A1/2014/001",
+        "band" : 1,
+        "output_path" : "/home/kalimaha/Desktop/MODIS/OUTPUT",
+        "gdal_merge" : {
+            # "-n" : -3000,
+            # "-a_nodata" : -3000
+        },
+        "gdalwarp" : {
+            "-multi" : "",
+            "-of" : "GTiff",
+            "-tr" : "0.004166665, -0.004166665",
+            "-s_srs" :"'+proj=sinu +R=6371007.181 +nadgrids=@null +wktext'",
+            "-co" : "'TILED=YES'",
+            "-t_srs" : "EPSG:4326",
+            "-srcnodata" : -3000,
+            "-dstnodata" : "nodata"
+        },
+        "gdaladdo" : {
+            "parameters" : {
+                "-r" : "average"
+            },
+            "overviews_levels" : "2 4 8 16"
+        }
+    }
+    process_hdfs(obj)
+    return Response(json.dumps('{"OK":"OK"}'), content_type='application/json; charset=utf-8')
