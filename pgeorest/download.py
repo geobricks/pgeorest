@@ -56,35 +56,6 @@ def process_rasters_service(source_name):
         obj['source_path'] = payload['source_path']
         obj['output_path'] = payload['source_path'] + '/OUTPUT'
         obj['gdalwarp']['-tr'] = str(payload['pixel_size']) + ', -' + str(payload['pixel_size'])
-        print obj
-        # print payload['source_path']
-        # print payload['pixel_size']
-        # obj = {
-        #     "output_file_name" : "MODIS_250m.tif",
-        #     "source_path" : payload['source_path'],
-        #     "band" : 1,
-        #     "output_path" : payload['source_path'] + "/OUTPUT",
-        #     "gdal_merge" : {
-        #         # "-n" : -3000,
-        #         # "-a_nodata" : -3000
-        #     },
-        #     "gdalwarp" : {
-        #         "-multi" : "",
-        #         "-of" : "GTiff",
-        #         "-tr" : "0.004166665, -0.004166665",
-        #         "-s_srs" :"'+proj=sinu +R=6371007.181 +nadgrids=@null +wktext'",
-        #         "-co" : "'TILED=YES'",
-        #         "-t_srs" : "EPSG:4326",
-        #         "-srcnodata" : -3000,
-        #         "-dstnodata" : "nodata"
-        #     },
-        #     "gdaladdo" : {
-        #         "parameters" : {
-        #             "-r" : "average"
-        #         },
-        #         "overviews_levels" : "2 4 8 16"
-        #     }
-        # }
         try:
             process_hdfs(obj)
             return Response(json.dumps('{"OK":"OK"}'), content_type='application/json; charset=utf-8')
