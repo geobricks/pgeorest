@@ -26,8 +26,8 @@ def manager_start(source_name):
         file_paths_and_sizes = payload['file_paths_and_sizes']
         filesystem_structure = payload['filesystem_structure']
         mgr = Manager(source_name, file_paths_and_sizes, filesystem_structure)
-        mgr.run()
-        return Response(json.dumps('Manager started.'), content_type='application/json; charset=utf-8')
+        target_dir = mgr.run()
+        return Response(json.dumps('{"target_dir": ' + target_dir + '}'), content_type='application/json; charset=utf-8')
     except Exception, e:
         raise PGeoException(e.message, 500)
 
