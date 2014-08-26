@@ -9,10 +9,7 @@ from flask import request
 
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
-# spatial_db = DBConnection(settings["db"]["spatial"])
-#
-# print "here"
-# print spatial_db
+spatial_db = DBConnection(settings["db"]["spatial"])
 
 @app.route('/')
 def index():
@@ -26,12 +23,8 @@ def query_db(datasource, query):
     try:
 
         spatial_db = DBConnection(settings["db"][datasource])
-
-        print
-        # result = spatial_db.query("select adm0_code from spatial.gaul2_3857_test")
         result = spatial_db.query(query)
         return Response(json.dumps(result), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
-
 

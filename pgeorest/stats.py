@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, Response
 from flask.ext.cors import cross_origin
+import copy
 from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
 from pgeo.config.settings import settings
@@ -135,12 +136,30 @@ def get_lat_lon(layer, lat, lon):
 def get_stats_by_layer():
     try:
         user_json = request.get_json()
-        # merged = merge_layer_metadata('modis', user_json)
-        # mongo_id = str(DBMetadata.insert_metadata(merged))
-        # response = {'status_code': 200, 'status_message': 'OK', 'mongo_id': mongo_id}
         s = stats.zonal_stats(user_json)
         print s
         return Response(json.dumps(s), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 
+
+@app.route('/rasters/spatial_query/', methods=['POST'])
+@app.route('/rasters/spatial_query', methods=['POST'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_stats_by_layers():
+    try:
+        user_json = request.get_json()
+        response = []
+        for uid in user_json["raster"]["uids"]:
+            json_stat = copy.deepcopy(user_json)
+            json_stat["raster"]["uid"] = uid
+            log.info(json_stat)
+            s = {}
+            s[uid] = stats.zonal_stats(json_stat)
+            log.info(s)
+            #s["uid"] = str(uid)
+            response.append(s)
+        log.info(response)
+        return Response(json.dumps(response), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
