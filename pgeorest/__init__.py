@@ -8,8 +8,8 @@ from pgeorest.schema import schema
 from pgeorest.filesystem import filesystem
 from pgeorest.metadata import metadata
 from pgeorest.search import search
-from pgeorest import stats
-from pgeorest import spatialquery
+# from pgeorest import stats
+# from pgeorest import spatialquery
 import logging
 
 
@@ -21,10 +21,10 @@ app.register_blueprint(browse_trmm, url_prefix='/browse/trmm')
 app.register_blueprint(download, url_prefix='/download')
 app.register_blueprint(schema, url_prefix='/schema')
 app.register_blueprint(filesystem, url_prefix='/filesystem')
-app.register_blueprint(stats.app, url_prefix='/stats')
+# app.register_blueprint(stats.app, url_prefix='/stats')
 app.register_blueprint(metadata, url_prefix='/metadata')
 app.register_blueprint(search, url_prefix='/search')
-app.register_blueprint(spatialquery.app, url_prefix='/spatialquery')
+# app.register_blueprint(spatialquery.app, url_prefix='/spatialquery')
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
