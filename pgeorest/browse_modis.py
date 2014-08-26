@@ -66,6 +66,17 @@ def list_layers_subset_service(product_name, year, day, from_h, to_h, from_v, to
         raise PGeoException(e.get_message(), e.get_status_code())
 
 
+@browse_modis.route('/<product_name>/<year>/<day>/<countries>')
+@browse_modis.route('/<product_name>/<year>/<day>/<countries>/')
+@cross_origin(origins='*')
+def list_layers_countries_subset_service(product_name, year, day, countries):
+    try:
+        out = m.list_layers_countries_subset(product_name, year, day, countries)
+        return Response(json.dumps(out), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+
 @browse_modis.route('/countries')
 @browse_modis.route('/countries/')
 @cross_origin(origins='*')
