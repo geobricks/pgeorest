@@ -1,8 +1,9 @@
 from flask import jsonify
 from flask import render_template
 from pgeo.config.settings import settings
-from pgeorest import app
 from pgeo.error.custom_exceptions import PGeoException
+from pgeorest import app
+
 
 
 @app.errorhandler(PGeoException)
@@ -22,4 +23,4 @@ def root():
     return 'Welcome to p-geo!'
 
 if __name__ == '__main__':
-    app.run(port=settings['port'], debug=settings['debug'])
+    app.run(port=settings['port'], debug=settings['debug'], threaded=True)
