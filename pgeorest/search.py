@@ -43,6 +43,15 @@ def find_layer_by_product_service(product):
     return Response(out, content_type='application/json; charset=utf-8')
 
 
+@search.route('/layer/product/<product>/type/<aggregation_type>', methods=['GET'])
+@search.route('/layer/product/<product>/type/<aggregation_type>/', methods=['GET'])
+@cross_origin(origins='*')
+def find_layer_by_product_and_type_service(product, aggregation_type):
+    out = json_util.dumps(mongo_search.find_layers_by_product(product, None, aggregation_type))
+    return Response(out, content_type='application/json; charset=utf-8')
+
+
+
 @search.route('/layer/product/<product>/dekad/<dekad>', methods=['GET'])
 @search.route('/layer/product/<product>/dekad/<dekad>/', methods=['GET'])
 @cross_origin(origins='*')
