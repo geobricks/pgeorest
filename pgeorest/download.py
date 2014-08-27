@@ -62,6 +62,7 @@ def process_rasters_service(source_name):
         obj = conf['processing']
         obj['source_path'] = payload['source_path']
         obj['output_path'] = payload['source_path'] + '/OUTPUT'
+        print 'PROCESS TO ' + str(obj['output_path'])
         obj['gdalwarp']['-tr'] = str(payload['pixel_size']) + ', -' + str(payload['pixel_size'])
         try:
             process_hdfs(obj)
