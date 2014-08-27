@@ -6,7 +6,6 @@ from flask import request
 from flask import Response
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.thread.download_threads_manager import Manager
-from pgeo.thread.download_threads_manager import progress_map
 from pgeo.thread.download_threads_manager import multi_progress_map
 from pgeo.thread.download_threads_manager import out_template
 from pgeo.gis.raster import process_hdfs
@@ -38,16 +37,8 @@ def manager_start(source_name):
         out = {'source_path': target_dir}
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except Exception, e:
+        print e
         raise PGeoException(e.message, 500)
-
-
-@download.route('/progress/<layer_name>')
-@download.route('/progress/<layer_name>/')
-@cross_origin(origins='*')
-def progress(layer_name):
-    if layer_name not in progress_map:
-        return jsonify(progress=out_template)
-    return jsonify(progress_map[layer_name])
 
 
 @download.route('/progress/<tab_index>/<layer_name>')
@@ -56,8 +47,8 @@ def progress(layer_name):
 def multiple_progress(layer_name, tab_index):
     if tab_index not in multi_progress_map:
         return jsonify(progress=out_template)
-        if layer_name not in multi_progress_map[tab_index]:
-            return jsonify(progress=out_template)
+    if layer_name not in multi_progress_map[tab_index]:
+        return jsonify(progress=out_template)
     return jsonify(multi_progress_map[tab_index][layer_name])
 
 
