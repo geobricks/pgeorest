@@ -9,9 +9,7 @@ from pgeo.stats.raster import Stats
 from flask import request
 
 
-
 app = Blueprint(__name__, __name__)
-
 log = log.logger(__name__)
 
 # Module to process statistics
@@ -137,7 +135,6 @@ def get_stats_by_layer():
     try:
         user_json = request.get_json()
         s = stats.zonal_stats(user_json)
-        print s
         return Response(json.dumps(s), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
@@ -153,13 +150,9 @@ def get_stats_by_layers():
         for uid in user_json["raster"]["uids"]:
             json_stat = copy.deepcopy(user_json)
             json_stat["raster"]["uid"] = uid
-            log.info(json_stat)
             s = {}
             s[uid] = stats.zonal_stats(json_stat)
-            log.info(s)
-            #s["uid"] = str(uid)
             response.append(s)
-        log.info(response)
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
