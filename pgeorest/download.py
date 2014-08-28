@@ -65,11 +65,11 @@ def process_rasters_service(source_name):
         print 'PROCESS TO ' + str(obj['output_path'])
         obj['gdalwarp']['-tr'] = str(payload['pixel_size']) + ', -' + str(payload['pixel_size'])
         try:
-            process_hdfs(obj)
-            return Response(json.dumps('{"OK":"OK"}'), content_type='application/json; charset=utf-8')
+            tiff = process_hdfs(obj)
+            return Response(json.dumps('{"TIFF":"' + tiff + '"}'), content_type='application/json; charset=utf-8')
         except Exception, e:
-            print e
-            raise PGeoException(e.message, 500)
+            # raise PGeoException(e.message, 500)
+            return Response(json.dumps('{"Message":"' + e.message + '"}'), content_type='application/json; charset=utf-8')
     except Exception, e:
-        print e
-        raise PGeoException(e.message, 500)
+        # raise PGeoException(e.message, 500)
+        return Response(json.dumps('{"Message":"' + e.message + '"}'), content_type='application/json; charset=utf-8')
