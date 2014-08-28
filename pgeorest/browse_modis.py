@@ -16,7 +16,8 @@ browse_modis = Blueprint('browse_modis', __name__)
 @cross_origin(origins='*')
 def list_products_service():
     try:
-        out = m.list_products()
+        # out = m.list_products()
+        out = m.get_modis_product_table()
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
