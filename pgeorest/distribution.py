@@ -23,6 +23,19 @@ db_spatial = stats.db_spatial
 distribution_folder = settings["folders"]["distribution"]
 zip_filename = "layers.zip"
 
+email_user = settings["email"]["user"]
+email_password = settings["email"]["password"]
+
+email_header = "Raster layers"
+email_body = "<html><head></head>" \
+             "<body>" \
+             "<div><b>PGeo - Distribution Service</b></div>" \
+             "<div style='padding-top:10px;'>The layers you asked to download are available at the following link:</div>" \
+             "<div style='padding-top:10px;'><a href='{{LINK}}'>Download Zip File</a></div>" \
+             "<div style='padding-top:10px;'><b>Please note that the link will work for the next 24h hours</b></div>" \
+             "</body>" \
+             "</html>"
+
 @app.route('/')
 def index():
     """
@@ -103,8 +116,9 @@ def get_layers_post():
 
         # send email if email address
         if email_address:
-            html = "<html><head></head><body><p>Hi!<br><a href='" + url + "'>Download!!</a></p></body></html>"
-            email_utils.send_email("geobrickspy@gmail.com", email_address, "<pwd>", "Download your layers", html)
+            log.info("sending email to: %s" % email_address)
+            html = email_body.replace("{{LINK}}", url)
+            email_utils.send_email(email_user, email_address, email_password, email_header, html)
 
         return Response(json.dumps('{ "url" : "' + url + '"}'), content_type='application/json; charset=utf-8')
     except PGeoException, e:
