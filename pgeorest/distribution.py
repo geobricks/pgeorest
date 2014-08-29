@@ -100,7 +100,7 @@ def get_layers_post():
             log.info(dst_file)
             move(filepath, dst_file)
 
-            # rename file based on uid layer_name (i.e. fenix:trmm_08_2014 -> fenix_trmm_08_2014)
+            # rename file based on uid layer_name (i.e. fenix:trmm_08_2014 -> trmm_08_2014)
             output_filename = uid.split(":")[1] + ".geotiff"
             output_file = os.path.join(output_folder, output_filename)
             os.rename(dst_file, output_file)
@@ -190,9 +190,10 @@ def get_layers(uids, spatial_query):
         zip_files(zip_filename, output_files, zip_folder )
 
         # send email
-        #html = "<html><head></head><body><p>Hi!<br><a href='http://168.202.28.214:5005/distribution/download/" + zip_folder_id + "'>Download!!</a></p></body></html>"
-        # html = "<a href='http://168.202.28.214:5005/distribution/download/" + zip_folder_id +"'></a>"
-        #email_utils.send_email("simone.murzilli@gmail.com", "guido.barbaglia@gmail.com", "<password>", "Download your layers", html)
+        # if email_address:
+        #     log.info("sending email to: %s" % email_address)
+        #     html = email_body.replace("{{LINK}}", url)
+        #     email_utils.send_email(email_user, email_address, email_password, email_header, html)
 
         url = request.host_url +"distribution/download/" + zip_folder_id
         return Response(json.dumps('{ "url" : "'+ url + '"}'), content_type='application/json; charset=utf-8')
@@ -209,6 +210,6 @@ def get_zip_file(id):
         log.info(request.base_url)
         log.info(request.path)
         # log.info(distribution_folder + str(id) +"/" + zip_filename)
-        return send_from_directory(directory=distribution_folder + str(id), filename=zip_filename)
+        return send_from_directory(directory=distribution_folder + str(id), filename=zip_filename,  as_attachment=True, attachment_filename=zip_filename)
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
