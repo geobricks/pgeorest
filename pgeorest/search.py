@@ -82,3 +82,11 @@ def find_layer_by_dekad_range(dekad_from, dekad_to, product):
 def find_layer_by_dekad_range_and_product(dekad_from, dekad_to):
     out = json_util.dumps(mongo_search.find_layers_by_dekad_range(dekad_from, dekad_to, None))
     return Response(out, content_type='application/json; charset=utf-8')
+
+
+@search.route('/layer/distinct/<field>', methods=['GET'])
+@search.route('/layer/distinct/<field>/', methods=['GET'])
+@cross_origin(origins='*')
+def find_distinct(field):
+    out = json_util.dumps(mongo_search.find_all(field))
+    return Response(out, content_type='application/json; charset=utf-8')
