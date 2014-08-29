@@ -104,7 +104,7 @@ def get_layers_post():
         # send email if email address
         if email_address:
             html = "<html><head></head><body><p>Hi!<br><a href='" + url + "'>Download!!</a></p></body></html>"
-            email_utils.send_email("simone.murzilli@gmail.com", email_address, "Qwaszx11", "Download your layers", html)
+            email_utils.send_email("geobrickspy@gmail.com", email_address, "<pwd>", "Download your layers", html)
 
         return Response(json.dumps('{ "url" : "' + url + '"}'), content_type='application/json; charset=utf-8')
     except PGeoException, e:
