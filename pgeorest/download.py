@@ -96,7 +96,6 @@ def bulk_manager_start(source_name):
 @download.route('/bulk/progress/<tab_index>/')
 @cross_origin(origins='*')
 def bulk_progress(tab_index):
-    print bulk_progress_map
     if tab_index not in bulk_progress_map:
         return jsonify(progress=out_template)
     return jsonify(bulk_progress_map[tab_index])
