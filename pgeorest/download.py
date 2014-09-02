@@ -98,4 +98,10 @@ def bulk_manager_start(source_name):
 def bulk_progress(tab_index):
     if tab_index not in bulk_progress_map:
         return jsonify(progress=out_template)
+    status = bulk_progress_map[tab_index]['status']
+    print bulk_progress_map[tab_index]
+    if 'ERROR' in status or 'COMPLETE' in status:
+        print '\t' + status
+        raise PGeoException(status, 500)
+    print bulk_progress_map[tab_index]
     return jsonify(bulk_progress_map[tab_index])

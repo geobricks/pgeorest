@@ -35,7 +35,8 @@ def list_services(source_name):
         config = read_config_file_json(source_name, 'data_providers')
         out = {
             'base_url': config['services_base_url'],
-            'services': config['services']
+            'services': config['services'],
+            'ftp': config['source']['ftp']
         }
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except Exception, err:
