@@ -2,11 +2,13 @@ import json
 from flask import Blueprint, Response
 from flask.ext.cors import cross_origin
 import copy
+import StringIO
 from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
 from pgeo.config.settings import settings
 from pgeo.stats.raster import Stats
 from flask import request
+
 
 
 app = Blueprint(__name__, __name__)
@@ -154,5 +156,31 @@ def get_stats_by_layers():
             s[uid] = stats.zonal_stats(json_stat)
             response.append(s)
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+
+@app.route('/rasters/scatter_analysis/', methods=['POST'])
+@app.route('/rasters/scatter_analysis', methods=['POST'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_scatter_analysis():
+    try:
+        user_json = request.get_json()
+        log.info(user_json)
+        response = []
+        for uid in user_json["raster"]["uids"]:
+            log.info(user_json)
+            json_stat = copy.deepcopy(user_json)
+            json_stat["raster"]["uid"] = uid
+            response.append(stats.zonal_stats(json_stat))
+
+        log.info(response[0])
+        log.info(response[1])
+        # io.BytesIO()
+        si = StringIO.StringIO()
+        result = stats.create_csv_merge(si, response[0], response[1])
+        log.info(result.getvalue())
+
+        return Response(result.getvalue())
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())

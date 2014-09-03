@@ -23,4 +23,4 @@ def root():
     return 'Welcome to p-geo!'
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=settings['port'], debug=settings['debug'], threaded=True)
+    app.run(port=settings['port'], debug=settings['debug'], threaded=True)
