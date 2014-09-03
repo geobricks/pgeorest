@@ -1,18 +1,19 @@
-from distutils.core import setup
+from setuptools import setup
+from setuptools import find_packages
 
 setup(
     name='PGeoREST',
-    version='0.1.1',
+    version='0.1.11',
     author='Simone Murzilli; Guido Barbaglia',
     author_email='geobrickspy@gmail.com',
-    packages=['pgeorest'],
+    packages=find_packages(),
     url='http://pypi.python.org/pypi/PGeoREST/',
     license='LICENSE.txt',
     description='PGeoREST module.',
     long_description=open('README.txt').read(),
     install_requires=[
-        'flask >= 0.10.1',
-        'flask-cors >= 1.3.1',
-        'pgeo >= 0.1.1'
+        'flask',
+        'flask-cors',
+        'pgeo'
     ]
 )
