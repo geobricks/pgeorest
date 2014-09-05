@@ -45,7 +45,7 @@ def index():
     return 'Welcome to the distribution module!'
 
 
-@app.route('/raster/spatial_query', methods=['POST'])
+@app.route('/raster/spatial_query/', methods=['POST'])
 @app.route('/raster/spatial_query', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_layers_post():
@@ -201,9 +201,8 @@ def get_layers(uids, spatial_query):
         raise PGeoException(e.get_message(), e.get_status_code())
 
 
-
-@app.route('/download/<id>', methods=['GET'])
 @app.route('/download/<id>/', methods=['GET'])
+@app.route('/download/<id>', methods=['GET'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_zip_file(id):
     try:
@@ -211,5 +210,40 @@ def get_zip_file(id):
         log.info(request.path)
         # log.info(distribution_folder + str(id) +"/" + zip_filename)
         return send_from_directory(directory=distribution_folder + str(id), filename=zip_filename,  as_attachment=True, attachment_filename=zip_filename)
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+
+@app.route('/downloadraster2/', methods=['GET'])
+@app.route('/downloadraster2', methods=['GET'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_raster_dfile():
+    try:
+        payload = request.get_json()
+        log.info(request.base_url)
+        log.info(request.path)
+        # log.info(distribution_folder + str(id) +"/" + zip_filename)
+        dir_name = payload[0:payload.index('final.tiff')]
+        return send_from_directory(directory=dir_name, filename=zip_filename,  as_attachment=True, attachment_filename="layer.geotiff")
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+@app.route('/downloadraster/<path>', methods=['GET'])
+@app.route('/downloadraster/<path>/', methods=['GET'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_raster_file(path):
+    try:
+        path = path.replace(':', '/')
+        print path
+        # payload = request.get_json()
+        # log.info(request.base_url)
+        # log.info(request.path)
+        # log.info(payload)
+        # log.info(payload['path'])
+        # # log.info(distribution_folder + str(id) +"/" + zip_filename)
+        # dir_name = payload['path'][0:payload['path'].index('final.tiff')]
+        # log.info(dir_name)
+        dir_name = "/home/kalimaha/Desktop/MODIS/MOD13A2/2014/001/OUTPUT_4/"
+        return send_from_directory(directory=dir_name, filename="final.tiff",  as_attachment=True, attachment_filename="layer.geotiff")
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
