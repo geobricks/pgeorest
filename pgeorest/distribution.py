@@ -234,16 +234,9 @@ def get_raster_dfile():
 def get_raster_file(path):
     try:
         path = path.replace(':', '/')
-        print path
-        # payload = request.get_json()
-        # log.info(request.base_url)
-        # log.info(request.path)
-        # log.info(payload)
-        # log.info(payload['path'])
-        # # log.info(distribution_folder + str(id) +"/" + zip_filename)
-        # dir_name = payload['path'][0:payload['path'].index('final.tiff')]
-        # log.info(dir_name)
-        dir_name = "/home/kalimaha/Desktop/MODIS/MOD13A2/2014/001/OUTPUT_4/"
+        log.info(path)
+        dir_name = path[0:path.rindex('/')]
+        log.info(dir_name)
         return send_from_directory(directory=dir_name, filename="final.tiff",  as_attachment=True, attachment_filename="layer.geotiff")
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())

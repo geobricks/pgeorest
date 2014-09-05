@@ -46,9 +46,7 @@ def list_steps_service(source_name):
 def process_service(source_name):
     try:
         payload = request.get_json()
-        log.info(payload)
         out = process(payload)
-        log.info(out)
         try:
             return Response(json.dumps(out), content_type='application/json; charset=utf-8')
         except Exception, e:
