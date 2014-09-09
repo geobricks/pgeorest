@@ -63,3 +63,14 @@ def list_layers_subset_service(year, month, from_day, to_day):
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
+
+
+@browse_trmm2.route('/layers/<year>/<month>')
+@browse_trmm2.route('/layers/<year>/<month>/')
+@cross_origin(origins='*')
+def list_layers_month_subset_service(year, month):
+    try:
+        out = t.list_layers_month_subset(year, month)
+        return Response(json.dumps(out), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())

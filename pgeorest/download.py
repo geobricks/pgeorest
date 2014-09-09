@@ -80,10 +80,10 @@ def process_rasters_service(source_name):
 def bulk_manager_start(source_name):
     try:
         payload = request.get_json()
-        filesystem_structure = payload['filesystem_structure']
+        aggregation = payload['aggregation']
         bulk_download_objects = payload['bulk_download_objects']
         tab_id = payload['tab_id']
-        mgr = BulkDownloadManager(source_name, filesystem_structure, bulk_download_objects, tab_id)
+        mgr = BulkDownloadManager(source_name, bulk_download_objects, tab_id, aggregation)
         target_dir = mgr.run()
         out = {'source_path': target_dir}
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
