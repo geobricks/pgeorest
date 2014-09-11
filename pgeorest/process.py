@@ -57,15 +57,15 @@ def process_service(source_name):
         raise PGeoException(e.message, 500)
 
 
-@processing.route('/publish/<title>/<path>', methods=['GET', 'POST'])
-@processing.route('/publish/<title>/<path>/', methods=['GET', 'POST'])
+@processing.route('/publish/<title>/<style>/<path>', methods=['GET', 'POST'])
+@processing.route('/publish/<title>/<style>/<path>/', methods=['GET', 'POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
-def publish_service(title, path):
+def publish_service(title, style, path):
     try:
         path = path.replace(':', '/')
         try:
             manager = Manager(settings)
-            metadata_def = get_metadata(title)
+            metadata_def = get_metadata(title, style)
             manager.publish_coverage(path, metadata_def)
             return Response(json.dumps(path), content_type='application/json; charset=utf-8')
         except Exception, e:
@@ -76,7 +76,7 @@ def publish_service(title, path):
         raise PGeoException(e.message, 500)
 
 
-def get_metadata(title):
+def get_metadata(title, style):
 
     creationDate = calendar.timegm(datetime.datetime.now().timetuple())
 
@@ -115,9 +115,9 @@ def get_metadata(title):
     metadata_def["meSpatialRepresentation"] = {}
     metadata_def["meSpatialRepresentation"]["seDefaultStyle"] = {}
     if aggregationProcessing == "da":
-        metadata_def["meSpatialRepresentation"]["seDefaultStyle"]["name"] = "ndvi_" + aggregationProcessing
+        metadata_def["meSpatialRepresentation"]["seDefaultStyle"]["name"] = style + "_" + aggregationProcessing
     else:
-        metadata_def["meSpatialRepresentation"]["seDefaultStyle"]["name"] = "ndvi"
+        metadata_def["meSpatialRepresentation"]["seDefaultStyle"]["name"] = style
 
 
     # merging metadata to the base raster one
