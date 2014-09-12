@@ -8,7 +8,7 @@ from pgeo.error.custom_exceptions import PGeoException
 from pgeo.thread.download_threads_manager import Manager
 from pgeo.thread.bulk_download_threads_manager import BulkDownloadManager
 from pgeo.thread.bulk_download_threads_manager import progress_map as bulk_progress_map
-from pgeo.thread.download_threads_manager import multi_progress_map
+# from pgeo.thread.download_threads_manager import multi_progress_map
 from pgeo.thread.download_threads_manager import out_template
 from pgeo.gis.raster import process_hdfs
 from pgeo.config.settings import read_config_file_json
@@ -16,6 +16,7 @@ from pgeo.config.settings import read_config_file_json
 
 download = Blueprint('download', __name__)
 managers = {}
+multi_progress_map = None
 
 
 @download.route('/')
@@ -36,6 +37,8 @@ def manager_start(source_name):
             managers[tab_id] = {}
         mgr = Manager(source_name, file_paths_and_sizes, filesystem_structure, tab_id)
         target_dir = mgr.run()
+        global multi_progress_map
+        multi_progress_map = mgr.multi_progress_map
         out = {'source_path': target_dir}
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except Exception, e:
