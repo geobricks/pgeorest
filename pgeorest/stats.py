@@ -111,6 +111,32 @@ def get_histogram_buckets(layer, buckets):
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 
+
+@app.route('/raster/<layer>/hist/buckets/<buckets>/min/<min>/max/<max>/', methods=['GET'])
+@app.route('/raster/<layer>/hist/buckets/<buckets>/min/<min>/max/<max>', methods=['GET'])
+@cross_origin(origins='*')
+def get_histogram_buckets_min_max(layer, buckets, min, max):
+    """
+    Extracts histogram from a layer
+    TODO: add a boolean and buckets
+    default: boolean = True, buckets = 256
+    @param layer: workspace:layername
+    @param buckets: number of buckets i.e. 256
+    @return: json with the raster statistics
+    """
+    try:
+        if ":" not in layer:
+            return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
+
+        json_stats = raster_histogram
+        json_stats["raster"]["uid"] = layer
+        json_stats["stats"]["buckets"] = int(buckets)
+        json_stats["stats"]["min"] = float(min)
+        json_stats["stats"]["max"] = float(max)
+        return Response(json.dumps(stats.get_histogram(json_stats)), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
 @app.route('/raster/<layer>/lat/<lat>/lon/<lon>/', methods=['GET'])
 @app.route('/raster/<layer>/lat/<lat>/lon/<lon>', methods=['GET'])
 @cross_origin(origins='*')
