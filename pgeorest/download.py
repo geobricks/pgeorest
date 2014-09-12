@@ -8,15 +8,14 @@ from pgeo.error.custom_exceptions import PGeoException
 from pgeo.thread.download_threads_manager import Manager
 from pgeo.thread.bulk_download_threads_manager import BulkDownloadManager
 from pgeo.thread.bulk_download_threads_manager import progress_map as bulk_progress_map
-# from pgeo.thread.download_threads_manager import multi_progress_map
 from pgeo.thread.download_threads_manager import out_template
+from pgeo.thread.download_threads_manager import multi_progress_map
 from pgeo.gis.raster import process_hdfs
 from pgeo.config.settings import read_config_file_json
 
 
 download = Blueprint('download', __name__)
 managers = {}
-multi_progress_map = None
 
 
 @download.route('/')
@@ -37,8 +36,6 @@ def manager_start(source_name):
             managers[tab_id] = {}
         mgr = Manager(source_name, file_paths_and_sizes, filesystem_structure, tab_id)
         target_dir = mgr.run()
-        global multi_progress_map
-        multi_progress_map = mgr.multi_progress_map
         out = {'source_path': target_dir}
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except Exception, e:
@@ -51,8 +48,11 @@ def manager_start(source_name):
 @cross_origin(origins='*')
 def multiple_progress(layer_name, tab_index):
     if tab_index not in multi_progress_map:
+        print('tab index %s not in the map' % tab_index)
+        print multi_progress_map
         return jsonify(progress=out_template)
     if layer_name not in multi_progress_map[tab_index]:
+        print('layer_name %s not in the map', layer_name)
         return jsonify(progress=out_template)
     return jsonify(multi_progress_map[tab_index][layer_name])
 
