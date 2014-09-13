@@ -9,8 +9,6 @@ from pgeo.config.settings import settings
 from pgeo.stats.raster import Stats
 from flask import request
 
-
-
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
 
@@ -137,10 +135,10 @@ def get_histogram_buckets_min_max(layer, buckets, min, max):
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 
-@app.route('/raster/<layer>/lat/<lat>/lon/<lon>/', methods=['GET'])
-@app.route('/raster/<layer>/lat/<lat>/lon/<lon>', methods=['GET'])
+@app.route('/raster/<layers>/lat/<lat>/lon/<lon>/', methods=['GET'])
+@app.route('/raster/<layers>/lat/<lat>/lon/<lon>', methods=['GET'])
 @cross_origin(origins='*')
-def get_lat_lon(layer, lat, lon):
+def get_lat_lon(layers, lat, lon):
     """
     Get the value of the layer at lat/lon position
     @param layer: workspace:layername
@@ -149,9 +147,12 @@ def get_lat_lon(layer, lat, lon):
     @return: json with the raster statistics
     """
     try:
-        if ":" not in layer:
-            return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
-        return Response({ "TODO" : "TODO"}, content_type='application/json; charset=utf-8')
+        if ":" not in layers:
+            return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
+
+        input_layers = layers.split(",")
+        s = stats.get_location_values(input_layers, lat, lon)
+        return Response(json.dumps(s), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 

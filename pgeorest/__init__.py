@@ -13,6 +13,7 @@ from pgeorest.search import search
 from pgeorest import stats
 from pgeorest import spatialquery
 from pgeorest import distribution
+from pgeorest import ghg
 import logging
 
 
@@ -32,6 +33,7 @@ app.register_blueprint(stats.app, url_prefix='/stats')
 app.register_blueprint(spatialquery.app, url_prefix='/spatialquery')
 app.register_blueprint(distribution.app, url_prefix='/distribution')
 app.register_blueprint(processing, url_prefix='/process')
+app.register_blueprint(ghg.app, url_prefix='/ghg')
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
