@@ -3,7 +3,7 @@ from flask import Blueprint, Response
 from flask.ext.cors import cross_origin
 from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
-from pgeo.config.settings import settings
+from pgeorest.config.settings import settings
 from pgeo.db.postgresql.common import DBConnection
 from flask import request
 
