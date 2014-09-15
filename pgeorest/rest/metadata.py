@@ -6,21 +6,21 @@ from flask.ext.cors import cross_origin
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeorest.config.settings import settings
-from pgeo.metadata.metadata import merge_layer_metadata
-from pgeo.metadata.db_metadata import DBMetadata
+from pgeo.metadata.metadata import Metadata
 
-metadata = Blueprint('metadata', __name__)
+app = Blueprint(__name__, __name__)
 
-DBMetadata = DBMetadata(settings["db"]["metadata"])
+metadata = Metadata(settings)
+db_metadata = metadata.db_metadata
 
-@metadata.route('/')
+@app.route('/')
 @cross_origin(origins='*')
 def index():
     return 'Welcome to the Metadata module!'
 
 
-@metadata.route('/create', methods=['POST'])
-@metadata.route('/create/', methods=['POST'])
+@app.route('/create', methods=['POST'])
+@app.route('/create/', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def create():
     """
@@ -29,16 +29,16 @@ def create():
     """
     try:
         user_json = request.get_json()
-        merged = merge_layer_metadata('modis', user_json)
-        mongo_id = str(DBMetadata.insert_metadata(merged))
+        merged = metadata.merge_layer_metadata('modis', user_json)
+        mongo_id = str(db_metadata.insert_metadata(merged))
         response = {'status_code': 200, 'status_message': 'OK', 'mongo_id': mongo_id}
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
     except:
         raise PGeoException(errors[513], status_code=513)
 
 
-@metadata.route('/delete/<id>', methods=['DELETE'])
-@metadata.route('/delete/<id>/', methods=['DELETE'])
+@app.route('/delete/<id>', methods=['DELETE'])
+@app.route('/delete/<id>/', methods=['DELETE'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def delete(id):
     """

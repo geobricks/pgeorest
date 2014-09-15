@@ -10,7 +10,6 @@ from pgeorest.config.settings import read_config_file_json
 from pgeo.gis.processing import process
 from pgeo.manager.manager import Manager
 from pgeorest.config.settings import settings
-from pgeo.metadata.metadata import merge_layer_metadata
 from pgeo.utils import log
 
 
@@ -63,8 +62,9 @@ def publish_service(title, style, path):
         path = path.replace(':', '/')
         try:
             manager = Manager(settings)
-            metadata_def = get_metadata(title, style)
+            metadata_def = get_metadata(manager.metadata, title, style)
             manager.publish_coverage(path, metadata_def)
+
             return Response(json.dumps(path), content_type='application/json; charset=utf-8')
         except Exception, e:
             log.error(e)
@@ -74,7 +74,7 @@ def publish_service(title, style, path):
         raise PGeoException(e.message, 500)
 
 
-def get_metadata(title, style):
+def get_metadata(metadata, title, style):
 
     creationDate = calendar.timegm(datetime.datetime.now().timetuple())
 
@@ -119,5 +119,5 @@ def get_metadata(title, style):
 
 
     # merging metadata to the base raster one
-    metadata_def = merge_layer_metadata("raster", metadata_def)
+    metadata_def = metadata.merge_layer_metadata("raster", metadata_def)
     return metadata_def

@@ -9,7 +9,7 @@ from pgeorest.rest.download import download
 from pgeorest.rest.process import processing
 from pgeorest.rest.schema import schema
 from pgeorest.rest.filesystem import filesystem
-from pgeorest.rest.metadata import metadata
+from pgeorest.rest import metadata
 from pgeorest.rest.search import search
 from pgeorest.rest import stats
 from pgeorest.rest import spatialquery
@@ -63,7 +63,7 @@ for module in settings['modules']:
 app.register_blueprint(download, url_prefix='/download')
 app.register_blueprint(schema, url_prefix='/schema')
 app.register_blueprint(filesystem, url_prefix='/filesystem')
-app.register_blueprint(metadata, url_prefix='/metadata')
+app.register_blueprint(metadata.app, url_prefix='/metadata')
 app.register_blueprint(search, url_prefix='/search')
 app.register_blueprint(stats.app, url_prefix='/stats')
 app.register_blueprint(spatialquery.app, url_prefix='/spatialquery')
@@ -72,12 +72,12 @@ app.register_blueprint(processing, url_prefix='/process')
 app.register_blueprint(ghg.app, url_prefix='/ghg')
 
 
-links = []
-for rule in app.url_map.iter_rules():
-    print rule
-    print rule.methods
-    print rule.arguments
-    print
+# links = []
+# for rule in app.url_map.iter_rules():
+#     print rule
+#     print rule.methods
+#     print rule.arguments
+#     print
 
 
 # Logging level.
