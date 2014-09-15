@@ -17,6 +17,7 @@ from pgeorest.rest import spatialquery
 from pgeorest.rest import distribution
 from pgeorest.rest import ghg
 import logging
+from flask import Flask, render_template, url_for
 
 
 # Initialize the Flask app
@@ -72,6 +73,14 @@ app.register_blueprint(spatialquery.app, url_prefix='/spatialquery')
 app.register_blueprint(distribution.app, url_prefix='/distribution')
 app.register_blueprint(processing, url_prefix='/process')
 app.register_blueprint(ghg.app, url_prefix='/ghg')
+
+
+links = []
+for rule in app.url_map.iter_rules():
+    print rule
+    print rule.methods
+    print rule.arguments
+    print
 
 
 # Logging level.
