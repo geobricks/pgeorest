@@ -6,6 +6,7 @@ from pgeo.utils import log
 from pgeorest.config.settings import settings
 from pgeo.db.postgresql.common import DBConnection
 from flask import request
+import inspect
 
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
@@ -21,7 +22,6 @@ def index():
 @cross_origin(origins='*', headers=['Content-Type'])
 def query_db(datasource, query):
     try:
-
         spatial_db = DBConnection(settings["db"][datasource])
         result = spatial_db.query(query)
         return Response(json.dumps(result), content_type='application/json; charset=utf-8')

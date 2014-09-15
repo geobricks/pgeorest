@@ -3,7 +3,7 @@ from flask import Response
 from flask.ext.cors import cross_origin
 from pgeo.metadata.search import MongoSearch
 from bson import json_util
-from pgeo.config.settings import settings
+from pgeorest.config.settings import settings
 
 
 search = Blueprint('search', __name__)

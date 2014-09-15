@@ -5,7 +5,7 @@ import copy
 import StringIO
 from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
-from pgeo.config.settings import settings
+from pgeorest.config.settings import settings
 from pgeo.stats.raster import Stats
 from flask import request
 

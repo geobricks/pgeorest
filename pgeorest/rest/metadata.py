@@ -5,20 +5,18 @@ from flask import request
 from flask.ext.cors import cross_origin
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
-from pgeo.config.settings import settings
+from pgeorest.config.settings import settings
 from pgeo.metadata.metadata import merge_layer_metadata
 from pgeo.metadata.db_metadata import DBMetadata
 
-
 metadata = Blueprint('metadata', __name__)
 
+DBMetadata = DBMetadata(settings["db"]["metadata"])
 
 @metadata.route('/')
 @cross_origin(origins='*')
 def index():
     return 'Welcome to the Metadata module!'
-
-DBMetadata = DBMetadata(settings["db"]["metadata"])
 
 
 @metadata.route('/create', methods=['POST'])

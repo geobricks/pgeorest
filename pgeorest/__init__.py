@@ -6,7 +6,6 @@ from importlib import import_module
 from pgeo.error.custom_exceptions import PGeoException
 from pgeorest.config.settings import settings
 from pgeorest.rest.download import download
-from pgeorest.rest.browse_trmm2 import browse_trmm2
 from pgeorest.rest.process import processing
 from pgeorest.rest.schema import schema
 from pgeorest.rest.filesystem import filesystem
@@ -17,7 +16,6 @@ from pgeorest.rest import spatialquery
 from pgeorest.rest import distribution
 from pgeorest.rest import ghg
 import logging
-from flask import Flask, render_template, url_for
 
 
 # Initialize the Flask app
@@ -62,7 +60,6 @@ for module in settings['modules']:
 
 
 # Core services.
-app.register_blueprint(browse_trmm2, url_prefix='/browse/trmm2')
 app.register_blueprint(download, url_prefix='/download')
 app.register_blueprint(schema, url_prefix='/schema')
 app.register_blueprint(filesystem, url_prefix='/filesystem')
@@ -88,6 +85,9 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 
+
 # Start Flask server
 if __name__ == '__main__':
     app.run(host=settings['host'], port=settings['port'], debug=settings['debug'], threaded=True)
+
+

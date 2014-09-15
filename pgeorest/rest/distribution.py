@@ -4,7 +4,7 @@ from flask.ext.cors import cross_origin
 import copy
 from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
-from pgeo.config.settings import settings
+from pgeorest.config.settings import settings
 from flask import request, send_from_directory
 from shutil import move
 import os

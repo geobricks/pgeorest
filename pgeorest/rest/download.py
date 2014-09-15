@@ -11,7 +11,7 @@ from pgeo.thread.bulk_download_threads_manager import progress_map as bulk_progr
 from pgeo.thread.download_threads_manager import out_template
 from pgeo.thread.download_threads_manager import multi_progress_map
 from pgeo.gis.raster import process_hdfs
-from pgeo.config.settings import read_config_file_json
+from pgeorest.config.settings import read_config_file_json
 
 
 download = Blueprint('download', __name__)

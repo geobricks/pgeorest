@@ -6,18 +6,16 @@ from flask import Response
 import calendar
 import datetime
 from pgeo.error.custom_exceptions import PGeoException
-from pgeo.config.settings import read_config_file_json
+from pgeorest.config.settings import read_config_file_json
 from pgeo.gis.processing import process
 from pgeo.manager.manager import Manager
-from pgeo.config.settings import settings
+from pgeorest.config.settings import settings
 from pgeo.metadata.metadata import merge_layer_metadata
 from pgeo.utils import log
 
 
 processing = Blueprint('processing', __name__)
 log = log.logger('process.py')
-
-
 
 
 @processing.route('/')

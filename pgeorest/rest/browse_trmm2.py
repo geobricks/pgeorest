@@ -2,13 +2,13 @@ import json
 from flask import Blueprint
 from flask import Response
 from flask.ext.cors import cross_origin
-from pgeo.config.settings import read_config_file_json
+# from pgeo.config.settings import read_config_file_json
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.dataproviders import trmm2 as t
 
 
 browse_trmm2 = Blueprint('browse_trmm2', __name__)
-conf = read_config_file_json('trmm2', 'data_providers')
+# conf = read_config_file_json('trmm2', 'data_providers')
 
 
 @browse_trmm2.route('/')
