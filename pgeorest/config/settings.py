@@ -7,12 +7,24 @@ settings = {
     
     "modules": [
         {
+            # Label
+            "label": "MODIS",
             # The path to the Python file containing the Blueprint
             "module_name": "pgeomodis.rest.modis_rest",
             # The name of the Blueprint
             "rest_name": "modis",
             # The prefix to be used for the Blueprint
             "url_prefix": "/browse/modis"
+        },
+        {
+            # Label
+            "label": "TRMM",
+            # The path to the Python file containing the Blueprint
+            "module_name": "pgeotrmm.rest.trmm_rest",
+            # The name of the Blueprint
+            "rest_name": "trmm",
+            # The prefix to be used for the Blueprint
+            "url_prefix": "/browse/trmm"
         }
     ],
 
