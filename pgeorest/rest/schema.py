@@ -4,7 +4,7 @@ from flask import Response
 from flask.ext.cors import cross_origin
 from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
-from pgeorest.config.settings import read_config_file_json
+from pgeorest.utils import read_config_file_json
 from pgeo.utils.filesystem import list_sources
 
 schema = Blueprint('schema', __name__)
@@ -32,7 +32,7 @@ def list_sources_service():
 @cross_origin(origins='*')
 def list_services(source_name):
     try:
-        config = read_config_file_json(source_name, 'data_providers')
+        config = read_config_file_json(source_name)
         out = {
             'bands': config['bands'],
             'base_url': config['services_base_url'],

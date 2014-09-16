@@ -11,7 +11,7 @@ from pgeo.thread.bulk_download_threads_manager import progress_map as bulk_progr
 from pgeo.thread.download_threads_manager import out_template
 from pgeo.thread.download_threads_manager import multi_progress_map
 from pgeo.gis.raster import process_hdfs
-from pgeorest.config.settings import read_config_file_json
+from pgeorest.utils import read_config_file_json
 
 
 download = Blueprint('download', __name__)
@@ -63,7 +63,7 @@ def multiple_progress(layer_name, tab_index):
 def process_rasters_service(source_name):
     try:
         payload = request.get_json()
-        conf = read_config_file_json(source_name, 'data_providers')
+        conf = read_config_file_json(source_name)
         obj = conf['processing']
         obj['source_path'] = payload['source_path']
         obj['output_path'] = payload['source_path'] + '/OUTPUT'
