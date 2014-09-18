@@ -6,6 +6,7 @@ from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeorest.config.settings import settings
 from importlib import import_module
+from pgeomodis.config.modis_config import config as config_data
 
 
 schema = Blueprint('schema', __name__)
@@ -36,11 +37,11 @@ def list_sources_service():
 @cross_origin(origins='*')
 def list_services(source_name):
     try:
-        source_name = source_name[0:source_name.index('.json')] if '.json' in source_name else source_name
-        source_name = source_name.lower()
-        mod = import_module('pgeo' + source_name + '.config')
-        config_folder = mod.__file__[0:mod.__file__.rindex('/')]
-        config_data = json.loads(open(config_folder + '/' + source_name + '.json').read())
+        # source_name = source_name[0:source_name.index('.json')] if '.json' in source_name else source_name
+        # source_name = source_name.lower()
+        # mod = import_module('pgeo' + source_name + '.config')
+        # config_folder = mod.__file__[0:mod.__file__.rindex('/')]
+        # config_data = json.loads(open(config_folder + '/' + source_name + '.json').read())
         out = {
             'bands': config_data['bands'],
             'base_url': config_data['services_base_url'],
