@@ -13,9 +13,7 @@ app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
 
 
-
 # default json_statistics
-
 raster_statistics = {
     "raster": {
         "uid": None

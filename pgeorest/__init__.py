@@ -21,7 +21,6 @@ from pgeorest.rest import ghg
 import logging
 import json
 
-
 # Initialize the Flask app
 app = Flask(__name__)
 
