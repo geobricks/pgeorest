@@ -10,8 +10,8 @@ from pgeo.metadata.metadata import Metadata
 
 app = Blueprint(__name__, __name__)
 
-metadata = Metadata(settings)
-db_metadata = metadata.db_metadata
+# metadata = Metadata(settings)
+# db_metadata = metadata.db_metadata
 
 @app.route('/')
 @cross_origin(origins='*')
@@ -28,6 +28,8 @@ def create():
     @return: Acknowledge in JSON format: status_code, status_message, mongo_id
     """
     try:
+        metadata = Metadata(settings)
+        db_metadata = metadata.db_metadata
         user_json = request.get_json()
         merged = metadata.merge_layer_metadata('modis', user_json)
         mongo_id = str(db_metadata.insert_metadata(merged))
@@ -47,7 +49,9 @@ def delete(id):
     @return: MongoDB message
     """
     try:
-        out = DBMetadata.remove_metadata_by_id(id)
+        metadata = Metadata(settings)
+        db_metadata = metadata.db_metadata
+        out = db_metadata.remove_metadata_by_id(id)
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except:
         raise PGeoException(errors[513], status_code=513)

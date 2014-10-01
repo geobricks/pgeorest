@@ -6,16 +6,16 @@ import os
 settings = {
     
     "modules": [
-        {
-            # Label
-            "label": "MODIS",
-            # The path to the Python file containing the Blueprint
-            "module_name": "pgeomodis.rest.modis_rest",
-            # The name of the Blueprint
-            "rest_name": "modis",
-            # The prefix to be used for the Blueprint
-            "url_prefix": "/browse/modis"
-        }
+        # {
+        #     # Label
+        #     "label": "MODIS",
+        #     # The path to the Python file containing the Blueprint
+        #     "module_name": "pgeomodis.rest.modis_rest",
+        #     # The name of the Blueprint
+        #     "rest_name": "modis",
+        #     # The prefix to be used for the Blueprint
+        #     "url_prefix": "/browse/modis"
+        # }
         # {
         #     # Label
         #     "label": "TRMM",
@@ -25,14 +25,13 @@ settings = {
         #     "rest_name": "trmm",
         #     # The prefix to be used for the Blueprint
         #     "url_prefix": "/browse/trmm"
-        # }
     ],
 
     # To be used by Flask: DEVELOPMENT ONLY
     "debug": True,
 
     # Flask host: DEVELOPMENT ONLY
-    "host": "168.202.28.57",
+    "host": "168.202.28.214",
 
 
     # Flask port: DEVELOPMENT ONLY
@@ -86,8 +85,8 @@ settings = {
         # Spatial Database
         "spatial": {
             # default_db will search in the dbs["database"] as default option
-            "dbname": "pgeo",
-            "host": "localhost",
+            "dbname": "fenix",
+            "host": "EXLPRFAOSTAT1.ext.fao.org",
             "port": "5432",
             "username": "fenix",
             "password": "Qwaszx",
@@ -95,8 +94,8 @@ settings = {
         },
 
         "stats": {
-            "dbname": "pgeo",
-            "host": "localhost",
+            "dbname": "fenix",
+            "host": "EXLPRFAOSTAT1.ext.fao.org",
             "port": "5432",
             "username": "fenix",
             "password": "Qwaszx",

@@ -6,7 +6,7 @@ from pgeo.error.custom_exceptions import PGeoException
 from pgeo.error.custom_exceptions import errors
 from pgeorest.config.settings import settings
 from importlib import import_module
-from pgeomodis.config.modis_config import config as config_data
+# from pgeomodis.config.modis_config import config as config_data
 
 
 schema = Blueprint('schema', __name__)
@@ -43,11 +43,11 @@ def list_services(source_name):
         # config_folder = mod.__file__[0:mod.__file__.rindex('/')]
         # config_data = json.loads(open(config_folder + '/' + source_name + '.json').read())
         out = {
-            'bands': config_data['bands'],
-            'base_url': config_data['services_base_url'],
-            'ftp': config_data['source']['ftp'],
-            'services': config_data['services'],
-            'subfolders': config_data['subfolders']
+            # 'bands': config_data['bands'],
+            # 'base_url': config_data['services_base_url'],
+            # 'ftp': config_data['source']['ftp'],
+            # 'services': config_data['services'],
+            # 'subfolders': config_data['subfolders']
         }
         return Response(json.dumps(out), content_type='application/json; charset=utf-8')
     except Exception, err:

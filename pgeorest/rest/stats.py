@@ -12,8 +12,7 @@ from flask import request
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
 
-# Module to process statistics
-stats = Stats(settings)
+
 
 # default json_statistics
 
@@ -63,6 +62,9 @@ def get_stats(layer):
 
         json_stats = raster_statistics
         json_stats["raster"]["uid"] = layer
+
+        # Module to process statistics
+        stats = Stats(settings)
         return Response(json.dumps(stats.get_stats(json_stats)), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
@@ -82,6 +84,8 @@ def get_histogram(layer):
 
         json_stats = raster_histogram
         json_stats["raster"]["uid"] = layer
+        # Module to process statistics
+        stats = Stats(settings)
         return Response(json.dumps(stats.get_histogram(json_stats)), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
@@ -105,6 +109,9 @@ def get_histogram_buckets(layer, buckets):
         json_stats = raster_histogram
         json_stats["raster"]["uid"] = layer
         json_stats["stats"]["buckets"] = int(buckets)
+
+        # Module to process statistics
+        stats = Stats(settings)
         return Response(json.dumps(stats.get_histogram(json_stats)), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
@@ -131,6 +138,9 @@ def get_histogram_buckets_min_max(layer, buckets, min, max):
         json_stats["stats"]["buckets"] = int(buckets)
         json_stats["stats"]["min"] = float(min)
         json_stats["stats"]["max"] = float(max)
+
+        # Module to process statistics
+        stats = Stats(settings)
         return Response(json.dumps(stats.get_histogram(json_stats)), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
@@ -151,6 +161,9 @@ def get_lat_lon(layers, lat, lon):
             return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
 
         input_layers = layers.split(",")
+
+        # Module to process statistics
+        stats = Stats(settings)
         s = stats.get_location_values(input_layers, lat, lon)
         return Response(json.dumps(s), content_type='application/json; charset=utf-8')
     except PGeoException, e:
@@ -163,6 +176,9 @@ def get_lat_lon(layers, lat, lon):
 def get_stats_by_layer():
     try:
         user_json = request.get_json()
+
+        # Module to process statistics
+        stats = Stats(settings)
         s = stats.zonal_stats(user_json)
         return Response(json.dumps(s), content_type='application/json; charset=utf-8')
     except PGeoException, e:
@@ -174,6 +190,9 @@ def get_stats_by_layer():
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_stats_by_layers():
     try:
+        # Module to process statistics
+        stats = Stats(settings)
+
         user_json = request.get_json()
         response = []
         for uid in user_json["raster"]["uids"]:
@@ -192,6 +211,9 @@ def get_stats_by_layers():
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_scatter_analysis():
     try:
+        # Module to process statistics
+        stats = Stats(settings)
+
         user_json = request.get_json()
         log.info(user_json)
         response = []

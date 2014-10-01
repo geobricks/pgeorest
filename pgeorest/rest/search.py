@@ -10,7 +10,7 @@ search = Blueprint('search', __name__)
 connection = settings['db']['metadata']['connection']
 db = settings['db']['metadata']['database']
 doc = settings['db']['metadata']['document']['layer']
-mongo_search = MongoSearch(connection, db, doc)
+# mongo_search = MongoSearch(connection, db, doc)
 
 
 @search.route('/')
@@ -23,6 +23,7 @@ def index():
 @search.route('/layer/id/<id>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_id_service(id):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layer_by_id(id))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -31,6 +32,7 @@ def find_layer_by_id_service(id):
 @search.route('/layer/dekad/<dekad>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_dekad_service(dekad):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_product(None, dekad, None))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -39,6 +41,7 @@ def find_layer_by_dekad_service(dekad):
 @search.route('/layer/product/<product>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_product_service(product):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_product(product, None, None))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -47,6 +50,7 @@ def find_layer_by_product_service(product):
 @search.route('/layer/product/<product>/type/<aggregation_type>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_product_and_type_service(product, aggregation_type):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_product(product, None, aggregation_type))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -56,6 +60,7 @@ def find_layer_by_product_and_type_service(product, aggregation_type):
 @search.route('/layer/product/<product>/dekad/<dekad>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_product_and_dekad_service(product, dekad):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_product(product, dekad, None))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -64,6 +69,7 @@ def find_layer_by_product_and_dekad_service(product, dekad):
 @search.route('/layer/product/<product>/dekad/<dekad>/type/<aggregation_type>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_product_and_dekad_and_type_service(product, dekad, aggregation_type):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_product(product, dekad, aggregation_type))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -72,6 +78,7 @@ def find_layer_by_product_and_dekad_and_type_service(product, dekad, aggregation
 @search.route('/layer/from/<dekad_from>/to/<dekad_to>/product/<product>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_dekad_range(dekad_from, dekad_to, product):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_dekad_range(dekad_from, dekad_to, product))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -80,6 +87,7 @@ def find_layer_by_dekad_range(dekad_from, dekad_to, product):
 @search.route('/layer/from/<dekad_from>/to/<dekad_to>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_layer_by_dekad_range_and_product(dekad_from, dekad_to):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_dekad_range(dekad_from, dekad_to, None))
     return Response(out, content_type='application/json; charset=utf-8')
 
@@ -88,5 +96,6 @@ def find_layer_by_dekad_range_and_product(dekad_from, dekad_to):
 @search.route('/layer/distinct/<field>/', methods=['GET'])
 @cross_origin(origins='*')
 def find_distinct(field):
+    mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_all(field))
     return Response(out, content_type='application/json; charset=utf-8')

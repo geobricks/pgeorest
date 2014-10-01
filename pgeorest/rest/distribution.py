@@ -18,8 +18,8 @@ app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
 
 
-stats = Stats(settings)
-db_spatial = stats.db_spatial
+# stats = Stats(settings)
+#db_spatial = stats.db_spatial
 distribution_folder = settings["folders"]["distribution"]
 zip_filename = "layers.zip"
 
@@ -50,6 +50,8 @@ def index():
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_layers_post():
     try:
+        stats = Stats(settings)
+        db_spatial = stats.db_spatial
         # TODO: it should be a Thread
 
         user_json = request.get_json()
@@ -132,6 +134,9 @@ def get_layers_post():
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_layers(uids, spatial_query):
     try:
+        stats = Stats(settings)
+        db_spatial = stats.db_spatial
+
         log.info(uids)
         log.info(spatial_query)
         uids = uids.split(";")

@@ -10,7 +10,6 @@ import inspect
 
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
-spatial_db = DBConnection(settings["db"]["spatial"])
 
 @app.route('/')
 def index():
