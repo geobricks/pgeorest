@@ -143,8 +143,8 @@ def get_histogram_buckets_min_max(layer, buckets, min, max):
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 
-@app.route('/raster/<layers>/lat/<lat>/lon/<lon>/', methods=['GET'])
-@app.route('/raster/<layers>/lat/<lat>/lon/<lon>', methods=['GET'])
+@app.route('/rasters/<layers>/lat/<lat>/lon/<lon>/', methods=['GET'])
+@app.route('/rasters/<layers>/lat/<lat>/lon/<lon>', methods=['GET'])
 @cross_origin(origins='*')
 def get_lat_lon(layers, lat, lon):
     """
@@ -231,3 +231,5 @@ def get_scatter_analysis():
         return Response(result.getvalue())
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
+
+
