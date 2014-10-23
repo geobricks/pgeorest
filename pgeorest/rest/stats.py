@@ -7,10 +7,13 @@ from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
 from pgeorest.config.settings import settings
 from pgeo.stats.raster import Stats
+from pgeo.gis.raster_scatter import create_scatter
 from flask import request
 
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
+
+#TODO: Review the REST for also layers that are not published, but are on the filesystem
 
 
 # default json_statistics
@@ -232,4 +235,28 @@ def get_scatter_analysis():
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 
+
+
+@app.route('/rasters/scatter_plot/<layers>/', methods=['GET'])
+@app.route('/rasters/scatter_plot/<layers>', methods=['GET'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_scatter_plot(layers):
+    try:
+
+        if ":" not in layers:
+            return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
+        input_layers = layers.split(",")
+
+        stats = Stats(settings)
+        raster_path1 = stats.get_raster_path(input_layers[0])
+        raster_path2 = stats.get_raster_path(input_layers[1])
+
+        response = create_scatter(raster_path1, raster_path2, 1, 1, 300)
+        #response = create_scatter(raster_path1, raster_path2, 1, 1, 20)
+
+        Response(json.dumps(response), content_type='application/json; charset=utf-8')
+
+        return Response(json.dumps(response), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
 
