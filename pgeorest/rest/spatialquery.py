@@ -20,6 +20,8 @@ def index():
 @app.route('/db/<datasource>/<query>', methods=['GET'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def query_db(datasource, query):
+    # TODO it's not used the schema in the query.
+    # it should be replaced if the query contains {{SCHEMA}} or something like that
     try:
         spatial_db = DBConnection(settings["db"][datasource])
         result = spatial_db.query(query)
