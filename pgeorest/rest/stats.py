@@ -61,7 +61,7 @@ def get_stats(layer):
         if ":" not in layer:
             return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
 
-        json_stats = raster_statistics
+        json_stats = copy.deepcopy(raster_statistics)
         json_stats["raster"]["uid"] = layer
 
         # Module to process statistics
@@ -83,7 +83,7 @@ def get_histogram(layer):
         if ":" not in layer:
             return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
 
-        json_stats = raster_histogram
+        json_stats = copy.deepcopy(raster_histogram)
         json_stats["raster"]["uid"] = layer
         # Module to process statistics
         stats = Stats(settings)
@@ -107,7 +107,7 @@ def get_histogram_buckets(layer, buckets):
         if ":" not in layer:
             return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
 
-        json_stats = raster_histogram
+        json_stats = copy.deepcopy(raster_histogram)
         json_stats["raster"]["uid"] = layer
         json_stats["stats"]["buckets"] = int(buckets)
 
@@ -134,7 +134,7 @@ def get_histogram_buckets_min_max(layer, buckets, min, max):
         if ":" not in layer:
             return PGeoException("Please Specify a workspace for " + str(layer), status_code=500)
 
-        json_stats = raster_histogram
+        json_stats = copy.deepcopy(raster_histogram)
         json_stats["raster"]["uid"] = layer
         json_stats["stats"]["buckets"] = int(buckets)
         json_stats["stats"]["min"] = float(min)
@@ -259,4 +259,30 @@ def get_scatter_plot(layers):
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
+
+
+
+@app.route('/rasters/scatter_plot/<layers>/workers/<workers>', methods=['GET'])
+@app.route('/rasters/scatter_plot/<layers>/workers/<workers>', methods=['GET'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_scatter_plot_workers(layers, workers):
+    try:
+
+        if ":" not in layers:
+            return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
+        input_layers = layers.split(",")
+
+        stats = Stats(settings)
+        raster_path1 = stats.get_raster_path(input_layers[0])
+        raster_path2 = stats.get_raster_path(input_layers[1])
+
+        response = create_scatter(raster_path1, raster_path2, 1, 1, 300, 6, int(workers))
+        #response = create_scatter(raster_path1, raster_path2, 1, 1, 20)
+
+        Response(json.dumps(response), content_type='application/json; charset=utf-8')
+
+        return Response(json.dumps(response), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
 
