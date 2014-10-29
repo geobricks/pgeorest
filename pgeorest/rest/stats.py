@@ -175,6 +175,12 @@ def get_lat_lon(layers, lat, lon):
 @app.route('/raster/spatial_query', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_stats_by_layer():
+    """
+    TODO is it useful of should be used the one below? @Deprecated?
+    Get raster statistic filtered by a spatial query:
+    TODO add json definition of the spatial query and statistics that can be applied
+    :return: a json with the zonal statistics
+    """
     try:
         user_json = request.get_json()
 
@@ -190,6 +196,11 @@ def get_stats_by_layer():
 @app.route('/rasters/spatial_query', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_stats_by_layers():
+    """
+    Get raster statistic filtered by a spatial query:
+    TODO add json definition of the spatial query and statistics that can be applied
+    :return: a json with the zonal statistics
+    """
     try:
         # Module to process statistics
         stats = Stats(settings)

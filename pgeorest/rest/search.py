@@ -88,7 +88,7 @@ def find_layer_by_product_and_dekad_and_type_service(dbname, product, dekad, agg
 @search.route('/<dbname>/layer/from/<dekad_from>/to/<dekad_to>/product/<product>', methods=['GET'])
 @search.route('/<dbname>/layer/from/<dekad_from>/to/<dekad_to>/product/<product>/', methods=['GET'])
 @cross_origin(origins='*')
-def find_layer_by_dekad_range(dekad_from, dekad_to, product):
+def find_layer_by_dekad_range(dbname, dekad_from, dekad_to, product):
     connection, db, doc = get_connection_properties(dbname)
     mongo_search = MongoSearch(connection, db, doc)
     out = json_util.dumps(mongo_search.find_layers_by_dekad_range(dekad_from, dekad_to, product))

@@ -35,7 +35,7 @@ settings = {
 
 
     # Flask port: DEVELOPMENT ONLY
-    "port": 5005,
+    "port": 5017,
 
     # Default folder root to store layers. Each data provider configuration file specifies the path AFTER this folder.
     "target_root": "/home/Desktop/GIS",
