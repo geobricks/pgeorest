@@ -45,8 +45,8 @@ def index():
     return 'Welcome to the distribution module!'
 
 
-@app.route('/raster/spatial_query/', methods=['POST'])
-@app.route('/raster/spatial_query', methods=['POST'])
+@app.route('/rasters/spatial_query/', methods=['POST'])
+@app.route('/rasters/spatial_query', methods=['POST'])
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_layers_post():
     try:
@@ -81,7 +81,6 @@ def get_layers_post():
             log.info(db_spatial.schema)
             log.info(authority_name)
             log.info(authority_code)
-
 
             query_extent = json_filter["query_extent"]
             query_layer = json_filter["query_layer"]
@@ -120,6 +119,9 @@ def get_layers_post():
         if email_address:
             log.info("sending email to: %s" % email_address)
             html = email_body.replace("{{LINK}}", url)
+            print email_user
+            print email_address
+            print email_password
             email_utils.send_email(email_user, email_address, email_password, email_header, html)
 
         return Response(json.dumps('{ "url" : "' + url + '"}'), content_type='application/json; charset=utf-8')
@@ -222,7 +224,7 @@ def get_zip_file(id):
 @app.route('/downloadraster2/', methods=['GET'])
 @app.route('/downloadraster2', methods=['GET'])
 @cross_origin(origins='*', headers=['Content-Type'])
-def get_raster_dfile():
+def get_raster_file2():
     try:
         payload = request.get_json()
         log.info(request.base_url)
@@ -243,5 +245,22 @@ def get_raster_file(path):
         dir_name = path[0:path.rindex('/')]
         log.info(dir_name)
         return send_from_directory(directory=dir_name, filename="final.tiff",  as_attachment=True, attachment_filename="layer.geotiff")
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+
+@app.route('/download/raster/<uid>', methods=['GET'])
+@app.route('/download/raster/<uid>/', methods=['GET'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def download_raster_file(uid):
+    try:
+        stats = Stats(settings)
+        log.info(uid)
+        path = stats.get_raster_path(uid)
+        print path
+        dir_name = path[0:path.rindex('/')]
+        print dir_name
+        filename = get_filename(dir_name)
+        return send_from_directory(directory=dir_name, filename=filename + ".geotiff",  as_attachment=True, attachment_filename=filename + ".tif")
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())

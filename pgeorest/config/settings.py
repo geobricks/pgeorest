@@ -33,9 +33,8 @@ settings = {
     # Flask host: DEVELOPMENT ONLY
     "host": "168.202.28.214",
 
-
     # Flask port: DEVELOPMENT ONLY
-    "port": 5017,
+    "port": 5020,
 
     # Default folder root to store layers. Each data provider configuration file specifies the path AFTER this folder.
     "target_root": "/home/Desktop/GIS",
@@ -75,7 +74,17 @@ settings = {
     # Databases
     "db": {
         "metadata": {
+            #"connection": "mongodb://168.202.39.41:27017/",
             "connection": "mongodb://localhost:27017/",
+            "database": "metadata",
+            "document": {
+                "layer": "layer"
+            }
+        },
+
+        "ghg": {
+            "connection": "mongodb://168.202.39.41:27017/",
+            #"connection": "mongodb://localhost:27017/",
             "database": "metadata",
             "document": {
                 "layer": "layer"
@@ -105,10 +114,11 @@ settings = {
 
     # Geoserver
     "geoserver": {
-        "geoserver_master": "http://localhost:9090/geoserver/rest",
+        "geoserver_master": "http://168.202.39.41:20100/geoserver/rest",
+        #"geoserver_master": "http://168.202.28.214:9090/geoserver/rest",
         "geoserver_slaves": [],
-        "username": "admin",
-        "password": "geoserver",
+        "username": "fenix",
+        "password": "Fenix2014",
         "default_workspace": "fenix",
         # this is used as default datasource to this is a reference to the spatial_db
         # da vedere!
