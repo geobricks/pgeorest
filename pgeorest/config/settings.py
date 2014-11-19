@@ -114,16 +114,24 @@ settings = {
 
     # Geoserver
     "geoserver": {
-        "geoserver_master": "http://168.202.39.41:20100/geoserver/rest",
+        "geoserver_master": "http://NO:20100/geoserver/rest",
         #"geoserver_master": "http://168.202.28.214:9090/geoserver/rest",
         "geoserver_slaves": [],
         "username": "fenix",
         "password": "Fenix2014",
         "default_workspace": "fenix",
         # this is used as default datasource to this is a reference to the spatial_db
-        # da vedere!
         # this should be connected with the current spatial db
+        # TODO: didn't implemnent it yet
         "default_datastore": "pgeo"
+    },
+
+    "geoserver_tmp": {
+        "geoserver_master": "http://168.202.28.214:9090/geoserver/rest",
+        "geoserver_slaves": [],
+        "username": "admin",
+        "password": "geoserver",
+        "default_workspace": "tmp"
     },
 
     # Stats

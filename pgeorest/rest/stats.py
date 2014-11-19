@@ -3,12 +3,15 @@ from flask import Blueprint, Response
 from flask.ext.cors import cross_origin
 import copy
 import StringIO
+import uuid
 from pgeo.error.custom_exceptions import PGeoException, errors
 from pgeo.utils import log
 from pgeorest.config.settings import settings
 from pgeo.stats.raster import Stats
 from pgeo.gis.raster_scatter import create_scatter
+from pgeo.gis.raster_mapalgebra import filter_layers
 from flask import request
+from pgeo.manager.manager import Manager
 
 app = Blueprint(__name__, __name__)
 log = log.logger(__name__)
@@ -46,9 +49,6 @@ def index():
     return 'Welcome to the stats module!'
 
 
-# @app.route('/raster/<layer>', methods=['GET'], headers=['Content-Type'])
-# @app.route('/raster/<layer>/',  methods=['GET'], headers=['Content-Type'])
-# @cross_origin(origins='*', headers=['Content-Type'])
 @app.route('/raster/<layer>/',  methods=['GET'])
 @app.route('/raster/<layer>', methods=['GET'])
 def get_stats(layer):
@@ -253,6 +253,11 @@ def get_scatter_analysis():
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_scatter_plot(layers):
     try:
+        """
+        Create a scatter plot from two rasters of the same dimension
+        @param layers: workspace:layername1,workspace:layername2
+        @return: json with the scatter plot data
+        """
 
         if ":" not in layers:
             return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
@@ -278,6 +283,12 @@ def get_scatter_plot(layers):
 @cross_origin(origins='*', headers=['Content-Type'])
 def get_scatter_plot_workers(layers, workers):
     try:
+        """
+        Create a scatter plot from two rasters of the same dimension
+        @param layers: workspace:layername1,workspace:layername2
+        @param workers: number of parallel processing to run
+        @return: json with the scatter plot data
+        """
 
         if ":" not in layers:
             return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
@@ -290,9 +301,62 @@ def get_scatter_plot_workers(layers, workers):
         response = create_scatter(raster_path1, raster_path2, 1, 1, 300, 6, int(workers))
         #response = create_scatter(raster_path1, raster_path2, 1, 1, 20)
 
-        Response(json.dumps(response), content_type='application/json; charset=utf-8')
-
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
+    except PGeoException, e:
+        raise PGeoException(e.get_message(), e.get_status_code())
+
+
+
+@app.route('/rasters/mapalgebra/layers/<layers>/minmax/<minmax>', methods=['GET'])
+@app.route('/rasters/mapalgebra/layers/<layers>/minmax/<minmax>', methods=['GET'])
+@cross_origin(origins='*', headers=['Content-Type'])
+def get_filter_layers(layers, minmax):
+    try:
+        """
+        Create a temporary mask layer using min-max of the layers
+        @param layers: workspace:layername1,workspace:layername2
+        @param minmax: min1,max1,min2,max2
+        @return: json with the scatter plot data
+        """
+
+        if ":" not in layers:
+            return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
+        input_layers = layers.split(",")
+        minmax_values = minmax.split(",")
+
+        stats = Stats(settings)
+
+        # getting raster information
+        raster_path1 = stats.get_raster_path(input_layers[0])
+        raster_path2 = stats.get_raster_path(input_layers[1])
+
+        # getting raster min max values
+        min1 = float(minmax_values[0])
+        max1 = float(minmax_values[1])
+        min2 = float(minmax_values[2])
+        max2 = float(minmax_values[3])
+
+        # create the layer
+        path = filter_layers(raster_path1, raster_path2, min1, max1, min2, max2)
+
+        # creating metdata
+        uid = str(uuid.uuid4())
+        metadata_def = {}
+        metadata_def["uid"] = "tmp:" + uid
+        metadata_def["title"] = {}
+        metadata_def["title"]["EN"] = "masked_" + uid
+        metadata_def["meSpatialRepresentation"] = {}
+
+        # publish the new tmp layer
+        # TODO: metadata? style to be applied?
+        # TODO: how to handle a tmp workspace overhead?
+        s = copy.deepcopy(settings)
+        # this copies the geoserver_tmp dato to "geoserver" settings to be passed to the manager
+        s["geoserver"] = s["geoserver_tmp"]
+        manager = Manager(s)
+        manager.publish_coverage(path, metadata_def, False, True, False)
+
+        return Response(json.dumps(metadata_def), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
 
