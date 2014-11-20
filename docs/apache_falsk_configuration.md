@@ -37,7 +37,7 @@ ServerName it's the key parameter. This should be the DNS name or current IP. Wi
 WSGI Configuration
 ========
 Create file *pgeo.wsgi* in the */var/www/public_html/wsgi* folder
-if the application is deployed as a packed write in the file:
+if the application is deployed as a package, write in the file:
 ```python
 from pgeorest.pgeorest_main import app as application
 ```
