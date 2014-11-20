@@ -1,12 +1,13 @@
 Apache Flask Configuration
 ====
 Source: [article](https://beagle.whoi.edu/redmine/projects/ibt/wiki/Deploying_Flask_Apps_with_Apache_and_Mod_WSGI)
+Source stackoverflow: [article](http://stackoverflow.com/questions/17386971/hello-world-flask-apache-mod-wsgi-no-response-from-apache)
 
 Project Structure
 ========
+* /usr/lib/python2.7/pgeo
 * /usr/lib/python2.7/pgeorest
     
-
 Apache Configuration
 ========
 Edit file /etc/apache2/ports.conf 
