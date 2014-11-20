@@ -5,6 +5,9 @@ Apache Flask Configuration
 
 Project Structure
 ========
+
+using pip install (or copy and paste the folders)
+
 * /usr/lib/python2.7/pgeo
 * /usr/lib/python2.7/pgeorest
     
