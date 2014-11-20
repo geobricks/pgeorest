@@ -47,7 +47,7 @@ from pgeorest.pgeorest_main import app as application
 
 N.B.
 ========
-the "main.py" called by the pgeorest_main.wsgi should not contain:
+the "pgeorest_main.py" called by the pgeorest_main.wsgi should not contain:
 
 ```python
 if __name__ == '__main__':
