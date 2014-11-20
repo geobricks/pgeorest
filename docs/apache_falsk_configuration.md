@@ -12,7 +12,7 @@ Apache Configuration
 ========
 Edit file /etc/apache2/ports.conf 
 
-ServerName it's the key parameter. This should be the DNS name or current IP
+ServerName it's the key parameter. This should be the DNS name or current IP. With a wrong IP or DNS ServerName apache would start but the URL would be unreachable. N.B. NO ERRORS are thrown by apache with this configuration error.
 
 ```script
 #WSGIRestrictStdout Off
