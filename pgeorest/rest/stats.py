@@ -267,44 +267,12 @@ def get_scatter_plot(layers):
         raster_path1 = stats.get_raster_path(input_layers[0])
         raster_path2 = stats.get_raster_path(input_layers[1])
 
-        response = create_scatter(raster_path1, raster_path2, 1, 1, 300)
-        #response = create_scatter(raster_path1, raster_path2, 1, 1, 20)
-
-        Response(json.dumps(response), content_type='application/json; charset=utf-8')
+        # creating scatter
+        response = create_scatter(raster_path1, raster_path2, 300)
 
         return Response(json.dumps(response), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
-
-
-
-@app.route('/rasters/scatter_plot/<layers>/workers/<workers>', methods=['GET'])
-@app.route('/rasters/scatter_plot/<layers>/workers/<workers>', methods=['GET'])
-@cross_origin(origins='*', headers=['Content-Type'])
-def get_scatter_plot_workers(layers, workers):
-    try:
-        """
-        Create a scatter plot from two rasters of the same dimension
-        @param layers: workspace:layername1,workspace:layername2
-        @param workers: number of parallel processing to run
-        @return: json with the scatter plot data
-        """
-
-        if ":" not in layers:
-            return PGeoException("Please Specify a workspace for " + str(layers), status_code=500)
-        input_layers = layers.split(",")
-
-        stats = Stats(settings)
-        raster_path1 = stats.get_raster_path(input_layers[0])
-        raster_path2 = stats.get_raster_path(input_layers[1])
-
-        response = create_scatter(raster_path1, raster_path2, 1, 1, 300, 6, int(workers))
-        #response = create_scatter(raster_path1, raster_path2, 1, 1, 20)
-
-        return Response(json.dumps(response), content_type='application/json; charset=utf-8')
-    except PGeoException, e:
-        raise PGeoException(e.get_message(), e.get_status_code())
-
 
 
 @app.route('/rasters/mapalgebra/layers/<layers>/minmax/<minmax>', methods=['GET'])

@@ -115,8 +115,3 @@ app.register_blueprint(ghg.app, url_prefix='/ghg')
 # Logging level.
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.INFO)
-
-
-# Start Flask server
-if __name__ == '__main__':
-    app.run(host=settings['host'], port=settings['port'], debug=settings['debug'], threaded=True)

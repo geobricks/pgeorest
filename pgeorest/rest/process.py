@@ -7,7 +7,7 @@ import calendar
 import datetime
 from pgeo.error.custom_exceptions import PGeoException
 from pgeorest.config.settings import read_config_file_json
-from pgeo.gis.processing import process
+from pgeo.gis.processing import process_data
 from pgeo.manager.manager import Manager
 from pgeorest.config.settings import settings
 from pgeo.utils import log
@@ -43,7 +43,7 @@ def list_steps_service(source_name):
 def process_service(source_name):
     try:
         payload = request.get_json()
-        out = process(payload)
+        out = process_data(payload)
         try:
             return Response(json.dumps(out), content_type='application/json; charset=utf-8')
         except Exception, e:
