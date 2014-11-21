@@ -128,6 +128,7 @@ settings = {
 
     "geoserver_tmp": {
         "geoserver_master": "http://168.202.28.214:9090/geoserver/rest",
+        "geoserver_wms": "http://168.202.28.214:9090/geoserver/wms",
         "geoserver_slaves": [],
         "username": "admin",
         "password": "geoserver",

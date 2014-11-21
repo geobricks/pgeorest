@@ -10,7 +10,7 @@ from pgeo.thread.bulk_download_threads_manager import BulkDownloadManager
 from pgeo.thread.bulk_download_threads_manager import progress_map as bulk_progress_map
 from pgeo.thread.download_threads_manager import out_template
 from pgeo.thread.download_threads_manager import multi_progress_map
-from pgeo.gis.raster import process_hdfs
+#from pgeo.gis.raster import process_hdfs
 from pgeorest.utils import read_config_file_json
 
 
@@ -69,8 +69,10 @@ def process_rasters_service(source_name):
         obj['output_path'] = payload['source_path'] + '/OUTPUT'
         obj['gdalwarp']['-tr'] = str(payload['pixel_size']) + ', -' + str(payload['pixel_size'])
         try:
-            tiff = process_hdfs(obj)
-            return Response(json.dumps('{"TIFF":"' + tiff + '"}'), content_type='application/json; charset=utf-8')
+            #tiff = process_hdfs(obj)
+            #return Response(json.dumps('{"TIFF":"' + tiff + '"}'), content_type='application/json; charset=utf-8')
+            # TODO: is it used?
+            return None
         except Exception, e:
             return Response(json.dumps('{"Message":"' + e.message + '"}'), content_type='application/json; charset=utf-8')
     except Exception, e:

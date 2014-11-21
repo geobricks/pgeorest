@@ -324,6 +324,10 @@ def get_filter_layers(layers, minmax):
         manager = Manager(s)
         manager.publish_coverage(path, metadata_def, False, True, False)
 
+        # adding the tmp geoserver WMS URL
+        if "geoserver_wms" in s["geoserver"]:
+            metadata_def["url_wms"] = s["geoserver"]["geoserver_wms"]
+
         return Response(json.dumps(metadata_def), content_type='application/json; charset=utf-8')
     except PGeoException, e:
         raise PGeoException(e.get_message(), e.get_status_code())
